@@ -1,0 +1,71 @@
+[tool.poetry]
+name = "iot-lab-base"
+version = "0.1.0"
+description = "IoT Lab Base for Beginners"
+authors = ["wldhg <jio@wldhg.com>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+iot = "iot_lab_base.__main__:app"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+typer = "^0.15.2"
+rich = "^14.0.0"
+flask = "^3.1.0"
+torch = "^2.6.0"
+numpy = "^2.2.4"
+pyserial = "^3.5"
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+isort = "^6.0.1"
+pyright = "^1.1.399"
+ipykernel = "^6.29.5"
+nbformat = "^5.10.4"
+ipywidgets = "^8.1.6"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ["py313"]
+
+[tool.pyright]
+pythonVersion = "3.13"
+pythonPlatform = "Linux"
+deprecateTypingAliases = true
+typeCheckingMode = "basic"
+reportPropertyTypeMismatch = "error"
+reportFunctionMemberAccess = "error"
+reportImportCycles = "warning"
+reportUnusedClass = "error"
+reportUnusedFunction = "error"
+reportUnusedVariable = "error"
+reportDuplicateImport = "error"
+reportUntypedFunctionDecorator = "warning"
+reportUntypedClassDecorator = "warning"
+reportUntypedBaseClass = "warning"
+reportUntypedNamedTuple = "warning"
+reportPrivateUsage = "error"
+reportTypeCommentUsage = "error"
+reportConstantRedefinition = "error"
+reportDeprecated = "error"
+reportUninitializedInstanceVariable = "warning"
+reportMissingParameterType = "warning"
+reportMissingTypeArgument = "warning"
+reportUnnecessaryIsInstance = "error"
+reportUnnecessaryCast = "error"
+reportUnnecessaryComparison = "error"
+reportUnnecessaryContains = "error"
+reportImplicitStringConcatenation = "warning"
+reportUnusedExpression = "warning"
+reportUnnecessaryTypeIgnoreComment = "warning"
+reportMatchNotExhaustive = "error"
+reportImplicitOverride = "error"
+
+[tool.isort]
+profile = "black"
+line_length = 100
