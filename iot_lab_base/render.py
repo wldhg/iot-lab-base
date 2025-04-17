@@ -15,7 +15,7 @@ def render_html(db: AppendOnlyDB, engines: dict[str, InferenceEngine], orig_html
 
     new_html = orig_html
 
-    find_all_placeholders = re.findall(r"\{\{(.*?)\}\}", orig_html)
+    find_all_placeholders: list[str] = re.findall(r"\{\{(.*?)\}\}", orig_html)
     for placeholder in find_all_placeholders:
         try:
             # TODO: Implement the logic to replace the placeholder with actual values
