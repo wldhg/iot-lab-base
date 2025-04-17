@@ -1,12 +1,13 @@
+import importlib
 import logging
 import os
 
 import flask.cli
 from flask import Flask, Response, abort, request
 
+from . import render
 from .db import AppendOnlyDB
 from .engine.abc import InferenceEngine
-from .render import render_html
 
 log = logging.getLogger(__name__)
 
@@ -27,9 +28,10 @@ def proc_server(db: AppendOnlyDB, engines: dict[str, InferenceEngine], web_port:
             abort(404)
 
         try:
+            importlib.reload(render)
             with open(file_path, "r") as f:
                 content = f.read()
-            rendered_content = render_html(db, engines, content)
+            rendered_content = render.render_html(db, engines, content)
             return Response(rendered_content, mimetype="text/html")
         except Exception as e:
             log.error(f"Error reading file: {file_path} - {e}")

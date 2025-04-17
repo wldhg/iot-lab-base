@@ -26,9 +26,14 @@ class VSGetRequest(TypedDict):
 VSRequest = VSPutRequest | VSGetRequest
 
 
-def parse_vs_request(line: str, log: logging.Logger) -> list[VSRequest]:
+def parse_vs_request(data: str, log: logging.Logger) -> list[VSRequest]:
+    """
+    Parse the incoming VegemiteSandwich request.
+    Expects the data to accurately preserve commands separated by VS_SEP separator without any
+    truncation.
+    """
     parsed_line: dict[str, int] = {}
-    for l in line.strip().split(VS_SEP):
+    for l in data.strip().split(VS_SEP):
         try:
             parsed_line.update(json.loads(l.strip()))
         except Exception as e:
@@ -57,16 +62,24 @@ def parse_vs_request(line: str, log: logging.Logger) -> list[VSRequest]:
 
 
 def make_vs_response(key: str, data: int | float) -> str:
+    """
+    Make the VegemiteSandwich response.
+    VegemiteSandwich response is basically a sequence of key-value pairs whose start and end
+    are marked by magic codes.
+    """
     return f"{VS_MAGIC_CODE_S}{key}={data}{VS_MAGIC_CODE_E}"
 
 
 def handle_line(
-    db: AppendOnlyDB, engines: dict[str, InferenceEngine], client_id: str, line: str
+    db: AppendOnlyDB, engines: dict[str, InferenceEngine], client_id: str, data: str
 ) -> list[bytes]:
-    log.debug(f">I [{client_id}] {line}")
+    """
+    Handle the incoming line from the VegemiteSandwich.
+    """
+    log.debug(f">I [{client_id}] {data}")
     retval: list[bytes] = []
 
-    reqs = parse_vs_request(line, log)
+    reqs = parse_vs_request(data, log)
     for req in reqs:
         if req["action"] == "PUT":
             log.info(f"I> [{client_id}] {req['key']}={req['value']}")

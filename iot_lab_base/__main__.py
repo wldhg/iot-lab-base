@@ -51,22 +51,20 @@ def main(
     log.info("Successfully loaded all data.")
 
     # Load the inference engines
-    engine_files = glob.glob(os.path.join(os.path.dirname(__file__), "engine", "*.py"))
     engines: dict[str, InferenceEngine] = {}
-    for engine_file in engine_files:
-        if os.path.basename(engine_file) != "abc.py":
-            engine_module_name = os.path.basename(engine_file).replace(".py", "")
-            module = __import__(f"iot_lab_base.engine.{engine_module_name}")
-            engine_class: type[InferenceEngine] | None = None
-            for name in dir(module):
-                obj = getattr(module, name)
-                if isinstance(obj, type) and issubclass(obj, InferenceEngine):
-                    engine_class = obj
-                    break
-            if engine_class is not None:
-                engine = engine_class(db)
-                engines[engine.model_name] = engine
-                log.info(f"Loaded engine: {engine.model_name}")
+    for engine_file in glob.glob(os.path.join(os.path.dirname(__file__), "engine", "*.py")):
+        engine_module_name = os.path.basename(engine_file).replace(".py", "")
+        module = __import__(f"iot_lab_base.engine.{engine_module_name}")
+        engine_class: type[InferenceEngine] | None = None
+        for name in dir(module):
+            obj = getattr(module, name)
+            if isinstance(obj, type) and issubclass(obj, InferenceEngine):
+                engine_class = obj
+                break
+        if engine_class is not None:
+            engine = engine_class(db)
+            engines[engine.model_name] = engine
+            log.info(f"Loaded engine: {engine.model_name}")
 
     # Start the server and broker threads
     server_thr = threading.Thread(
