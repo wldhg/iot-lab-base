@@ -2,7 +2,7 @@ import logging
 import os
 
 import flask.cli
-from flask import Flask, Response, abort
+from flask import Flask, Response, abort, request
 
 from .db import AppendOnlyDB
 from .engine.abc import InferenceEngine
@@ -35,6 +35,9 @@ def proc_server(db: AppendOnlyDB, engines: dict[str, InferenceEngine], web_port:
             log.error(f"Error reading file: {file_path} - {e}")
             abort(500)
 
-    # TODO: Add api for PUT request
+    @app.route("/_put")
+    def handle_put():  # pyright: ignore[reportUnusedFunction]
+        # TODO: Add api for PUT request
+        raise NotImplementedError("PUT request is not implemented yet.")
 
     app.run("0.0.0.0", web_port)
