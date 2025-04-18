@@ -19,9 +19,8 @@ def main(
     ] = "",
     debug: Annotated[bool, typer.Option(help="Enable debug mode for the logging")] = False,
 ):
-    if serial_dev:
-        if not os.path.exists(serial_dev):
-            raise ValueError(f"Serial device {serial_dev} does not exist.")
+    if serial_dev != "" and not os.path.exists(serial_dev):
+        raise ValueError(f"Serial device {serial_dev} does not exist.")
 
     if tcp_port < 1024 or tcp_port > 65535:
         raise ValueError("TCP port must be between 1024 and 65535.")
