@@ -14,6 +14,8 @@ __pycache__/
 /iot_lab_base/html/*
 !/iot_lab_base/html/example.html
 
+/iot_lab_base/render_*.py
+
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 

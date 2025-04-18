@@ -7,16 +7,6 @@ from typing import Annotated
 import typer
 from rich.logging import RichHandler
 
-logging.basicConfig(level=logging.NOTSET, handlers=[RichHandler()])
-
-
-from .db import AppendOnlyDB
-from .engine.abc import InferenceEngine
-from .proc_broker import proc_broker
-from .proc_server import proc_server
-
-log = logging.getLogger(__name__)
-
 
 def main(
     mock_broker: Annotated[
@@ -25,6 +15,7 @@ def main(
     tcp_port: Annotated[int, typer.Option(help="TCP port for the broker")] = 3545,
     web_port: Annotated[int, typer.Option(help="Web port for the server")] = 3600,
     serial_dev: Annotated[str, typer.Option(help="Serial device for the mocked broker")] = "",
+    debug: Annotated[bool, typer.Option(help="Enable debug mode for the logging")] = False,
 ):
     if mock_broker and not serial_dev:
         raise ValueError("Serial device must be specified when using mock broker.")
@@ -40,6 +31,19 @@ def main(
 
     if tcp_port == web_port:
         raise ValueError("TCP port and web port must be different.")
+
+    logging.basicConfig(
+        format="%(message)s",
+        level=logging.DEBUG if debug else logging.INFO,
+        handlers=[RichHandler()],
+    )
+
+    from .db import AppendOnlyDB
+    from .engine.abc import InferenceEngine
+    from .proc_broker import proc_broker
+    from .proc_server import proc_server
+
+    log = logging.getLogger(__name__)
 
     log.info("Launching the IoT Lab Base... Cheesed to meet you!")
 

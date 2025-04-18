@@ -33,7 +33,7 @@ class ExampleInferenceEngine(InferenceEngine):
         if len(data) < 10:
             raise ValueError("Not enough data for inference")
 
-        data_np = np.array([entry["value"] for entry in data], dtype=np.float32)
+        data_np = np.array([entry.value for entry in data], dtype=np.float32)
         data_tensor = torch.from_numpy(data_np).unsqueeze(0)
 
         output: torch.Tensor = self.model(data_tensor)

@@ -3,13 +3,14 @@ import logging
 import os
 import struct
 import time
+from dataclasses import dataclass
 from threading import Lock
-from typing import TypedDict
 
 log = logging.getLogger(__name__)
 
 
-class AppendOnlyDBEntry(TypedDict):
+@dataclass
+class AppendOnlyDBEntry:
     value: float
     ts: int  # timestamp (epoch time in seconds)
 
@@ -49,7 +50,7 @@ class AppendOnlyDB:
                     ts = int(struct.unpack(">I", ts_bytes)[0])
                     if key not in self.db:
                         self.db[key] = []
-                    self.db[key].append({"value": value, "ts": ts})
+                    self.db[key].append(AppendOnlyDBEntry(value, ts))
 
         self.db_file = open(self.db_path, "a+b")
 
@@ -90,7 +91,7 @@ class AppendOnlyDB:
         with self.lock:
             if key not in self.db:
                 self.db[key] = []
-            self.db[key].append({"value": value, "ts": ts})
+            self.db[key].append(AppendOnlyDBEntry(value, ts))
             key_encoded = key.encode("utf-8")
             value_encoded = struct.pack(">d", value)
             ts_encoded = struct.pack(">I", ts)
