@@ -9,19 +9,19 @@ from rich.logging import RichHandler
 
 
 def main(
-    mock_broker: Annotated[
-        bool, typer.Option(help="Mock TCP broker for high-radio interference environment")
-    ] = False,
     tcp_port: Annotated[int, typer.Option(help="TCP port for the broker")] = 3545,
     web_port: Annotated[int, typer.Option(help="Web port for the server")] = 3600,
-    serial_dev: Annotated[str, typer.Option(help="Serial device for the mocked broker")] = "",
+    serial_dev: Annotated[
+        str,
+        typer.Option(
+            help="Serial device for the mocked broker (give a device path to enable mocked broker)"
+        ),
+    ] = "",
     debug: Annotated[bool, typer.Option(help="Enable debug mode for the logging")] = False,
 ):
-    if mock_broker and not serial_dev:
-        raise ValueError("Serial device must be specified when using mock broker.")
-
-    if mock_broker and not os.path.exists(serial_dev):
-        raise ValueError(f"Serial device {serial_dev} does not exist.")
+    if serial_dev:
+        if not os.path.exists(serial_dev):
+            raise ValueError(f"Serial device {serial_dev} does not exist.")
 
     if tcp_port < 1024 or tcp_port > 65535:
         raise ValueError("TCP port must be between 1024 and 65535.")
@@ -80,7 +80,7 @@ def main(
     server_thr.start()
     broker_thr = threading.Thread(
         target=proc_broker,
-        args=(db, engines, mock_broker, tcp_port, serial_dev),
+        args=(db, engines, tcp_port, serial_dev),
         name="broker_thr",
         daemon=True,
     )

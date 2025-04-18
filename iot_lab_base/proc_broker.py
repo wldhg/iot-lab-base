@@ -15,11 +15,10 @@ SERIAL_BAUD_RATE = 9600
 def proc_broker(
     db: AppendOnlyDB,
     engines: dict[str, InferenceEngine],
-    mock_broker: bool,
     tcp_port: int,
     serial_dev: str,
 ):
-    if mock_broker:
+    if serial_dev != "":
         log = logging.getLogger(f"{__name__}:DMYSYS")
         log.info(f"DUMMY BROKER IS BOOTING UP... on {serial_dev}")
 
