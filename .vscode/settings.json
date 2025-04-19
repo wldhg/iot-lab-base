@@ -12,6 +12,7 @@
   "evenBetterToml.formatter.columnWidth": 100,
   "evenBetterToml.formatter.crlf": false,
   "evenBetterToml.formatter.trailingNewline": true,
+  "files.associations": { "*.html": "jinja-html" },
   "files.encoding": "utf8",
   "files.eol": "\n",
   "files.insertFinalNewline": true,

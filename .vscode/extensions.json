@@ -8,6 +8,7 @@
     "ms-python.vscode-pylance",
     "tamasfe.even-better-toml",
     "ms-toolsai.jupyter",
-    "ms-toolsai.jupyter-renderers"
+    "ms-toolsai.jupyter-renderers",
+    "samuelcolvin.jinjahtml"
   ]
 }
