@@ -1,4 +1,5 @@
 import glob
+import importlib
 import logging
 import os
 import threading
@@ -57,11 +58,15 @@ def main(
     engines: dict[str, InferenceEngine] = {}
     for engine_file in glob.glob(os.path.join(os.path.dirname(__file__), "engine", "*.py")):
         engine_module_name = os.path.basename(engine_file).replace(".py", "")
-        module = __import__(f"iot_lab_base.engine.{engine_module_name}")
+        module = importlib.import_module(f"iot_lab_base.engine.{engine_module_name}")
         engine_class: type[InferenceEngine] | None = None
         for name in dir(module):
             obj = getattr(module, name)
-            if isinstance(obj, type) and issubclass(obj, InferenceEngine):
+            if (
+                isinstance(obj, type)
+                and issubclass(obj, InferenceEngine)
+                and obj is not InferenceEngine
+            ):
                 engine_class = obj
                 break
         if engine_class is not None:
