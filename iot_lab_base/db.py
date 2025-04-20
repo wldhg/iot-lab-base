@@ -107,8 +107,12 @@ class AppendOnlyDB:
         Returns the path to the dump file.
         """
         dump_path = os.path.join(self.db_dir, f"db-dump-{int(time.time())}.json")
+        dump_data = {
+            key: [{"value": entry.value, "ts": entry.ts} for entry in entries]
+            for key, entries in self.db.items()
+        }
         with open(dump_path, "w") as f:
-            json.dump(self.db, f, indent=2)
+            json.dump(dump_data, f)
         return dump_path
 
     def close(self):
