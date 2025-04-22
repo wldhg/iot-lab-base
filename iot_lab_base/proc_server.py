@@ -39,7 +39,13 @@ def proc_server(db: AppendOnlyDB, engines: dict[str, InferenceEngine], web_port:
 
     @app.route("/_put")
     def handle_put():  # pyright: ignore[reportUnusedFunction]
-        # TODO: Add api for PUT request
-        raise NotImplementedError("PUT request is not implemented yet.")
+        try:
+            query_dict = request.args.to_dict()
+            for key, value in query_dict.items():
+                db.save(key, float(value))
+            return "OK"
+        except Exception as e:
+            log.error(f"Error handling PUT request: {e}")
+            abort(500)
 
     app.run("0.0.0.0", web_port)

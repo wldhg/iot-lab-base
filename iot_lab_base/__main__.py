@@ -2,6 +2,7 @@ import glob
 import importlib
 import logging
 import os
+import sys
 import threading
 from typing import Annotated
 
@@ -19,6 +20,7 @@ def main(
         ),
     ] = "",
     debug: Annotated[bool, typer.Option(help="Enable debug mode for the logging")] = False,
+    dump: Annotated[bool, typer.Option(help="Dump the database to a JSON file")] = False,
 ):
     if serial_dev != "" and not os.path.exists(serial_dev):
         raise ValueError(f"Serial device {serial_dev} does not exist.")
@@ -53,6 +55,11 @@ def main(
     for key, length in db_stat.items():
         log.info(f"Loaded {key} data: {length} entries")
     log.info("Successfully loaded all data.")
+    if dump:
+        dumped_path = db.dump()
+        log.info(f"Database dumped to {dumped_path}")
+        db.close()
+        sys.exit(0)
 
     # Load the inference engines
     engines: dict[str, InferenceEngine] = {}

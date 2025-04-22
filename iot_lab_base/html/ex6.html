@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 6</title>
+  </head>
+
+  <body>
+    <h1>Example 6</h1>
+    <p>
+      현재 온도는 {{value:temperature}} 도입니다.
+      <br />
+      현재 습도는 {{value:humidity}} %입니다.
+    </p>
+    <h3>온습도 상태창</h3>
+    <div
+      style="
+        background-color: {{eval:'red' if db.get('temperature').value > 25 else 'blue'}};
+        display: inline-block; width: 100px; height: 100px; color: white;
+      "
+    >
+      {{eval: "더워요" if db.get("temperature").value > 25 else "추워요"}}
+    </div>
+    <div
+      style="
+        background-color: {{eval:'yellow' if db.get('humidity').value > 70 else 'green'}};
+        display: inline-block; width: 100px; height: 100px; color: white;
+      "
+    >
+      {{eval: "습해요" if db.get("humidity").value > 70 else "습도 정상"}}
+    </div>
+    <hr />
+    <p>업데이트: {{ts:temperature}}</p>
+    <script>
+      setTimeout(function () {
+        location.reload();
+      }, 5000);
+    </script>
+  </body>
+</html>

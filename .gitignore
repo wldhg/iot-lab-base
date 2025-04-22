@@ -4,23 +4,8 @@ __pycache__/
 
 .venv
 
-/db.bin
-/db-dump-*.json
-
-/iot_lab_base/engine/*
-!/iot_lab_base/engine/abc.py
-!/iot_lab_base/engine/example.py
-
-/iot_lab_base/html/*
-!/iot_lab_base/html/example.html
-
-/iot_lab_base/render_*.py
-
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
-
-/ipynb/*
-!/ipynb/example.ipynb
 
 *.pt
 *.pth
